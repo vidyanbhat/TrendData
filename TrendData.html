@@ -1,0 +1,627 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:fb="http://www.facebook.com/2008/fbml">
+<head>
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript"
+	src="https://www.gstatic.com/charts/loader.js"></script>
+<!-- <script type="text/javascript" src="https://www.google.com/jsapi"></script> -->
+<script type="text/javascript"
+	src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart']}]}">
+	
+</script>
+<script type="text/javascript">
+	//google.load('visualization', '0');
+</script>
+<!-- <script type="text/javascript" src="https://www.google.com/jsapi"></script>  -->
+<script src="http://www.google.com/uds/solutions/dynamicfeed/gfdynamicfeedcontrol.js"
+type="text/javascript"></script>
+
+<style type="text/css">
+@import url("http://www.google.com/uds/solutions/dynamicfeed/gfdynamicfeedcontrol.css");
+
+#feedControl {
+margin-top : 10px;
+margin-left: auto;
+margin-right: auto;
+width : 440px;
+font-size: 12px;
+color: #9CADD0;
+}
+</style>
+<script type="text/javascript">
+function load() {
+var	y = document.getElementById("searchKeyword");
+var feed ="https://news.google.com/news/feeds?q="+y.value+"&hl=en&output=rss";
+new GFdynamicFeedControl(feed, "feedControl");
+
+}
+function searchKeyword4()
+{
+google.load("feeds", "1");
+google.setOnLoadCallback(load);
+}
+</script>
+<script type="text/javascript">
+
+var options ;
+
+	google.charts.load('current', {
+		'packages' : [ 'corechart' ]
+	});
+
+	function removeData(idVal) {
+
+		var x = document.getElementById(idVal);
+		x.remove(x.selectedIndex);
+	}
+
+	function myFunction(idVal) {
+		var person = prompt("Please enter your keyword", "sample");
+		if (person != null && person!="") {
+			var x = document.getElementById(idVal);
+			var option = document.createElement("option");
+			option.text = person;
+			x.add(option);
+
+		}
+	}
+	
+
+	function getBrowserDimensions() {
+		  return {
+		    width: (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth),
+		    height: (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight)
+		  };
+		}
+	function setDimentions() {
+		var browser_dims = getBrowserDimensions();
+		var h1 = browser_dims.height -250;
+		var h = browser_dims.height -260;
+		document.getElementById("curve_chart").style.height=h+"px"
+		document.getElementById("newsFrame").style.height=h+"px";
+		document.getElementById("newsFrame").style.minHeight = '200px';
+		document.getElementById("curve_chart").style.minHeight = '200px';
+		document.getElementById("newsFrame").style.minWidth = '250px';
+		document.getElementById("curve_chart").style.minWidth = '250px';
+		document.getElementById("main").style.minWidth = '500px';
+		document.getElementById("main").style.height = h1+"px";
+		if( browser_dims.height >  browser_dims.width*1.5)
+		{
+		document.getElementById("curve_chart").style.height='200px';
+		document.getElementById("newsFrame").style.height='200px';
+		}
+	//	alert(browser_dims.height);
+	}
+	function setDimentions1() {
+		var y = document.getElementById("searchKeyword");
+		
+		if(y.value !="")
+			{
+		var browser_dims = getBrowserDimensions();
+		var h1 = browser_dims.height -250;
+		var h = browser_dims.height -260;
+		document.getElementById("curve_chart").style.height=h+"px"
+		document.getElementById("newsFrame").style.height=h+"px";
+		document.getElementById("newsFrame").style.minHeight = '200px';
+		document.getElementById("curve_chart").style.minHeight = '200px';
+		document.getElementById("newsFrame").style.minWidth = '250px';
+		document.getElementById("curve_chart").style.minWidth = '250px';
+		document.getElementById("main").style.minWidth = '500px';
+		document.getElementById("main").style.height = h1+"px";
+		if( browser_dims.height >  browser_dims.width*1.5)
+			{
+			document.getElementById("curve_chart").style.height='200px';
+			document.getElementById("newsFrame").style.height='200px';
+			}
+	//	alert(browser_dims.height);
+		var chart = new google.visualization.ComboChart(document
+				.getElementById('curve_chart'));
+       /*  var data = google.visualization.arrayToDataTable([
+                                                          [ 'Year', 'Positive List', 'Nagative List' ],
+                                                          [ '2004', 0, 0 ], [ '2005', 0, 0 ], [ '2006', 0, 0 ],
+                                                          [ '2007', 0, 0 ] ]); */
+
+		var data1 = new google.visualization.DataTable(jsonObject);
+		chart.draw(data1, options);
+		y = document.getElementById("searchKeyword");
+		document.getElementById('newsFrame').src="News.html?keyword="+y.value;
+			}
+	}
+</script>
+
+<script type="text/javascript">
+	var jsonObject;
+	var jsonObject1;
+	var jsonObject2;
+	function searchKeyword1() {
+		//document.getElementById("curve_chart").innerHTML ="<p align='center'>Loading...";
+		setDimentions();
+		
+		var x = document.getElementById("positiveList");
+		var y = document.getElementById("searchKeyword");
+	
+		if(y.value =="")
+			{
+			alert("Please enter the keyword");
+			document.getElementById("searchKeyword").style.backgroundColor = "red";
+			document.getElementById('searchKeyword').focus();
+			//document.getElementById("searchKeyword").style='background-color:red';
+			return false;
+			}else
+				{
+				document.getElementById("searchKeyword").style.backgroundColor = "white";
+				}
+		document.getElementById("curve_chart").innerHTML ="<p align='center'>Loading...";
+		
+		var positiveDataCount = x.options.length;
+		var positiveListData = "";
+		var negativeListData = "";
+		for (var i = 0; i < x.options.length; i++) {
+			if (i == 0) {
+				positiveListData = x.options[i].value + " " + y.value;
+			} else {
+				positiveListData = positiveListData + "," + x.options[i].value
+						+ " " + y.value;
+			}
+		}
+
+		x = document.getElementById("negativeList");
+		y = document.getElementById("searchKeyword");
+
+		for (var i = 0; i < x.options.length; i++) {
+
+			if (i == 0) {
+				negativeListData = x.options[i].value + " " + y.value;
+			} else {
+				negativeListData = negativeListData + ',' + x.options[i].value
+						+ " " + y.value;
+			}
+		}
+		if (positiveListData == "") {
+			positiveListData = y.value;
+		}
+		if (negativeListData == "") {
+			negativeListData = y.value;
+		}
+		var z = document.getElementById("period").value;
+
+		var url = 'https://www.google.com/trends/fetchComponent?q='
+				+ positiveListData + ',' + negativeListData
+				+ '&cmpt=q&cid=TIMESERIES_GRAPH_0&export=3' + '&date=' + z;
+		var query = new google.visualization.Query(url);
+
+		query.send(handleQueryResponse);
+
+		function handleQueryResponse(response) {
+			
+			var data = response.getDataTable();
+			if (null != data) {
+
+				var googleDataQuery = response.getDataTable().toJSON();
+
+				jsonObject = response.getDataTable().toJSON();
+				var convertedData = new google.visualization.DataTable(
+						googleDataQuery, 0.5);
+
+				jsonObject = JSON.parse(convertedData.toJSON());
+				var i, cluster, j, segment, k, node;
+				for (i = 0; i < jsonObject.rows.length; i++) {
+					cluster = jsonObject.rows[i];
+					var data1 = 0;
+					var data2 = 0;
+					for (j = 1; j < cluster.c.length; j++) {
+						segment = cluster.c[j];
+						if (j <= positiveDataCount) {
+							if (null != segment && segment.f != null) {
+
+								node = segment.f;
+								data1 = Number(data1) + Number(node);
+							}
+
+						} else {
+							if (null != segment && segment.f != null) {
+
+								node = segment.f;
+								data2 = Number(data2) + Number(node);
+							}
+
+						}
+					}
+					var parse_obj = JSON.parse('{"v":"'
+							+ Math.floor(Number(data1)) + '","f":"'
+							+ Number(data1) + '"}');
+					jsonObject.rows[i].c[1] = parse_obj;
+
+					var parse_obj1 = JSON.parse('{"v":"-'
+							+ Math.floor(Number(data2)) + '","f":"-'
+							+ Number(data2) + '"}');
+					jsonObject.rows[i].c[2] = parse_obj1;
+
+					 for (k = 5; k < cluster.c.length; k++) {
+						jsonObject.rows[i].c[k] = "";
+					} 
+
+				}
+
+				var parse_obj3 = JSON
+						.parse('{"id":"query0","label":"+ve Search","type":"number","pattern":""}');
+				jsonObject.cols[1] = parse_obj3;
+
+				var parse_obj4 = JSON
+						.parse('{"id":"query1","label":"-ve Search","type":"number","pattern":""}');
+				jsonObject.cols[2] = parse_obj4;
+				var length = jsonObject.cols.length;
+				var parse_obj5 = JSON
+						.parse('{"id":"query0","label":"","type":"number","pattern":""}');
+				 for (k = length - 1; k > 4; k--) {
+					jsonObject.cols.splice(k, 1);
+				} 
+			} 
+
+		}
+	
+		searchKeyword2();
+	}
+
+	function searchKeyword2() {
+
+		var x = document.getElementById("positiveList");
+		var y = document.getElementById("searchKeyword");
+		var positiveDataCount = x.options.length;
+		var positiveListData = "";
+		var negativeListData = "";
+		for (var i = 0; i < x.options.length; i++) {
+			if (i == 0) {
+				positiveListData = x.options[i].value + " " + y.value;
+			} else {
+				positiveListData = positiveListData + "," + x.options[i].value
+						+ " " + y.value;
+			}
+		}
+		
+		x = document.getElementById("negativeList");
+		y = document.getElementById("searchKeyword");
+
+		for (var i = 0; i < x.options.length; i++) {
+
+			if (i == 0) {
+				negativeListData = x.options[i].value + " " + y.value;
+			} else {
+				negativeListData = negativeListData + ',' + x.options[i].value
+						+ " " + y.value;
+			}
+		}
+		if (positiveListData == "") {
+			positiveListData = y.value;
+		}
+		if (negativeListData == "") {
+			negativeListData = y.value;
+		}
+		var z = document.getElementById("period").value;
+
+		var url = 'https://www.google.com/trends/fetchComponent?q='
+				+ positiveListData + ',' + negativeListData
+				+ '&gprop=news&cmpt=q&cid=TIMESERIES_GRAPH_0&export=3'
+				+ '&date=' + z;
+		var query = new google.visualization.Query(url);
+
+		query.send(handleQueryResponse);
+
+		function handleQueryResponse(response) {
+
+			var data = response.getDataTable();
+			if (null != data) {
+
+				var googleDataQuery = response.getDataTable().toJSON();
+
+				jsonObject1 = response.getDataTable().toJSON();
+				var convertedData = new google.visualization.DataTable(
+						googleDataQuery, 0.5);
+
+				jsonObject1 = JSON.parse(convertedData.toJSON());
+				var i, cluster, j, segment, k, node;
+				for (i = 0; i < jsonObject1.rows.length; i++) {
+					cluster = jsonObject1.rows[i];
+					var data1 = 0;
+					var data2 = 0;
+					for (j = 1; j < cluster.c.length; j++) {
+						segment = cluster.c[j];
+						if (j <= positiveDataCount) {
+							if (null != segment && segment.f != null) {
+
+								node = segment.f;
+								data1 = Number(data1) + Number(node);
+							}
+
+						} else {
+							if (null != segment && segment.f != null) {
+
+								node = segment.f;
+								data2 = Number(data2) + Number(node);
+							}
+
+						}
+					}
+					var parse_obj = JSON.parse('{"v":"'
+							+ Math.floor(Number(data1)) + '","f":"'
+							+ Number(data1) + '"}');
+					jsonObject1.rows[i].c[1] = parse_obj;
+
+					var parse_obj1 = JSON.parse('{"v":"-'
+							+ Math.floor(Number(data2)) + '","f":"-'
+							+ Number(data2) + '"}');
+					jsonObject1.rows[i].c[2] = parse_obj1;
+
+					for (k = 3; k < cluster.c.length; k++) {
+						jsonObject1.rows[i].c[k] = "";
+					}
+
+				}
+
+				var parse_obj3 = JSON
+						.parse('{"id":"query2","label":"+ve News","type":"number","pattern":""}');
+				jsonObject1.cols[1] = parse_obj3;
+
+				var parse_obj4 = JSON
+						.parse('{"id":"query3","label":"-ve News","type":"number","pattern":""}');
+				jsonObject1.cols[2] = parse_obj4;
+				var length = jsonObject1.cols.length;
+				var parse_obj5 = JSON
+						.parse('{"id":"query0","label":"","type":"number","pattern":""}');
+				for (k = length - 1; k > 2; k--) {
+					jsonObject1.cols.splice(k, 1);
+				}
+
+				google.charts.setOnLoadCallback(drawChart(data));
+				function drawChart(data) {
+
+					 options = {
+							width:'95%',
+						title : 'Trend Result',
+						curveType : 'function',
+						legend : {
+							position : 'bottom'
+						},
+						vAxis : {
+							format : '0'
+						},
+						lineDashStyle : {
+							colors : [ 'blue', 'red', 'blue', 'red' ]
+						},
+						series : {
+							0 : {
+								
+								color :  'blue'
+							},
+							1 : {
+								type : 'line',
+								color : [ 'red']
+							},
+							2 : {
+								type : 'line',
+								lineDashStyle : [ 4,4],
+								color :  'blue'
+							},
+							3 : {
+								type : 'line',
+								lineDashStyle : [ 4,4],
+								color :  'red'
+							}
+						},
+						annotations : {
+							boxStyle : {
+								// Color of the box outline.
+								stroke : '#888',
+								// Thickness of the box outline.
+								strokeWidth : 3,
+								// x-radius of the corner curvature.
+								rx : 100,
+								// y-radius of the corner curvature.
+								ry : 100,
+
+								// Attributes for linear gradient fill.
+								gradient : {
+									// Start color for gradient.
+									color1 : 'blue',
+									// Finish color for gradient.
+									color2 : '#33b679',
+									// Where on the boundary to start and
+									// end the color1/color2 gradient,
+									// relative to the upper left corner
+									// of the boundary.
+									x1 : '0%',
+									y1 : '0%',
+									x2 : '100%',
+									y2 : '100%',
+									// If true, the boundary for x1,
+									// y1, x2, and y2 is the box. If
+									// false, it's the entire chart.
+									useObjectBoundingBoxUnits : false
+								}
+							}
+						}
+					}
+
+					var chart = new google.visualization.ComboChart(document
+							.getElementById('curve_chart'));
+					//var finalObj = $.extend(jsonObject,jsonObject1);
+					searchKeyword3();
+					
+					//jsonObject2 =mergeJSON(jsonObject,jsonObject1);
+					var data1 = new google.visualization.DataTable(jsonObject);
+					chart.draw(data1, options);
+				}
+
+			} else {
+
+				var div = document.getElementById('curve_chart');
+				div.innerHTML = "<br><br><br>\n\nNot enough search volume to show results.";
+				
+			}
+			y = document.getElementById("searchKeyword");
+			document.getElementById('newsFrame').src="User3.jsp?keyword="+y.value;
+		}
+		//searchKeyword4();
+		
+		
+		//alert(document.getElementById('newsFrame').src);
+		//document.getElementById("newsFrame").contentWindow.document.location.href="User3.jsp?keyword=Jackson";
+	}
+
+	function searchKeyword3() {
+		for (i = 0; i < jsonObject1.rows.length; i++) {
+
+			jsonObject.rows[i].c[3] = jsonObject1.rows[i].c[1];
+
+			jsonObject.rows[i].c[4] = jsonObject1.rows[i].c[2];
+
+		}
+		var parse_obj3 = JSON
+				.parse('{"id":"query2","label":"+ve News","type":"number","pattern":""}');
+		jsonObject.cols[3] = parse_obj3;
+
+		var parse_obj4 = JSON
+				.parse('{"id":"query3","label":"-ve News","type":"number","pattern":""}');
+		jsonObject.cols[4] = parse_obj4;
+
+	}
+</script>
+<title>Trend Data</title>
+
+<style>
+#main {
+	   border: 0px solid #c3c3c3;
+	display: -webkit-flex; 
+	 Safari 6.1+   -webkit-flex-direction: row-reverse; 
+	display: flex;
+	
+	flex-direction: row-reverse; 
+/* //	display:inline; */
+}
+
+
+</style>
+
+</head>
+
+<body onload="document.getElementById('searchKeyword').focus();setDimentions();" onresize="setDimentions1();" style="border: 1px solid #c3c3c3">
+		<div id="header"
+			style="width: 100%;background-color:navy; height: 30px; overflow: none"></div>
+			<div align="center">
+	<table style="width: 100%;">
+		<tr>
+		<th></th>
+			
+			<th>Positive List</th>
+			<th></th>
+			<th>Nagetive List</th>
+			<th></th>
+		</tr>
+		<tr>
+			<td width="13%"></td>
+			<td align="center" width="23%"><select id="positiveList" name="positiveList"
+				multiple style="width: 90%">
+					<option value="Good">Good</option>
+					<option value="Excellent">Excellent</option>
+					<option value="Hot">Hot</option>
+			</select></td>
+			<td width="10%">
+				<button type="button" onclick="myFunction('positiveList')" style="width: 80px">Add</button>
+				<button type="button" onclick="removeData('positiveList')" style="width: 80px">Remove</button>
+			</td>
+			
+			<td width="23%"><select name="negativeList" id="negativeList"
+				multiple style="width: 90%">
+					<option value="Bad">Bad</option>
+					<option value="Not">Not</option>
+
+			</select></td>
+			<td width="10%"><button type="button"
+					onclick="myFunction('negativeList')" style="width: 80px">Add</button>
+				<button type="button" onclick="removeData('negativeList')" style="width: 80px">Remove</button>
+			</td>
+			<td width="10%"></td>
+</tr>
+		
+		
+		<tr>&nbsp;
+		</tr>	
+		
+	
+		<tr>&nbsp;
+		</tr>		
+	</table>
+</div>
+	</br>
+	<hr>
+		<table style="width: 100%;"> <tr>
+		<td width="13%"></td>
+			<td width="5%">Keyword:</td>
+			<td width="20%">
+				<input type="text" id="searchKeyword" name="searchKeyword"  style="width: 65%"/>
+			</td>
+			
+			<td width="5%">Period:</td>
+			<td width="20%"><select name="period" id="period"  style="width: 65%">
+		<option value="today%201-m">1 month</option>
+		<option value="today%202-m">2 months</option>
+		<option value="today%206-m">6 months</option>
+		<option value="today%2012-m">1 year</option>
+		<option value="today%2024-m">2 years</option>
+		<option value="today%2060-m">5 years</option>
+
+	</select> 
+			</td>
+				<td width="20%">
+	<button type="button" onclick="searchKeyword1()"  style="width: 80px">Search</button></td>
+</tr>	
+
+<!-- <tr>
+			<td width="20%"></td>
+			<td width="10%">
+				
+			</td>
+			<td></td>
+			<td width="20%">&nbsp;&nbsp;&nbsp;&nbsp;
+	<button type="button" onclick="setDimentions()" style="width: 80px">Search</button></td>
+			<td width="10%">
+			</td>
+</tr> --></table>
+
+	<!-- <div align="center" style="width:83%">
+	
+	Keyword:
+	<input type="text" id="searchKeyword" name="searchKeyword" style="width: 15%"/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+	Period:
+	<select name="period" id="period" style="width: 15%">
+		<option value="today%201-m">1 month</option>
+		<option value="today%202-m">2 months</option>
+		<option value="today%206-m">6 months</option>
+		<option value="today%2012-m">1 year</option>
+		<option value="today%2024-m">2 years</option>
+		<option value="today%2060-m">5 years</option>
+
+	</select> &nbsp;&nbsp;&nbsp;&nbsp;
+	<button type="button" onclick="searchKeyword1()" style="width: 80px">Search</button></div> -->
+	
+	<hr>
+
+
+	<div id="main">
+		<!-- <div id="body">
+<div id="feedControl">Loading...</div>
+</div> -->
+
+<iframe  id="newsFrame" src="" style="width: 50%; height: 80%;border:0px;overflow-x: hidden; overflow-y: scroll"></iframe>
+		<div id="curve_chart" style="width: 50%; height: 80%; "></div>
+	</div>
+	<!-- 
+<iframe src="User3.jsp" id="news"></iframe> -->
+</body>
+</html>
+
