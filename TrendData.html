@@ -173,7 +173,7 @@ setDimentions2();
 	function searchKeyword1() {
 		//document.getElementById("curve_chart").innerHTML ="<p align='center'>Loading...";
 		setDimentions();
-		alert("");
+		
 		var x = document.getElementById("positiveList");
 		var y = document.getElementById("searchKeyword");
 	
@@ -230,7 +230,7 @@ setDimentions2();
 		query.send(handleQueryResponse);
 
 		function handleQueryResponse(response) {
-			alert(response);
+			
 			var data = response.getDataTable();
 			if (null != data) {
 
