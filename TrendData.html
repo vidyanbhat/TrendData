@@ -1,37 +1,46 @@
-
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:fb="http://www.facebook.com/2008/fbml">
 <head>
 
+<!--<script type="text/javascript" src="https://www.google.com/jsapi"></script>-->
+
+<script type="text/javascript">
+function load() {
+google.load('feeds', '1');
+var	y = document.getElementById("searchKeyword");
+var feed ;
+if(y != null)
+{
+feed= ="http://news.google.com/news/feeds?q="+y.value+"&amp;hl=en&amp;output=rss";
+
+}
+else{
+feed ="http://news.google.com/news/feeds?hl=en&output=rss";
+}
+new GFdynamicFeedControl(feed, "feedControl", {numResults:8});
+
+}
+</script>
+<script type="text/javascript"
+	src="https://www.google.com/jsapi?autoload={'modules':[{'name':'feeds','version':'1.0','language':'en','nocss'='true','callback':'load'}]}">
+	
+</script>
+<script src="http://www.google.com/uds/solutions/dynamicfeed/gfdynamicfeedcontrol.js"
+type="text/javascript"></script>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script type="text/javascript"
 	src="https://www.gstatic.com/charts/loader.js"></script>
- <script type="text/javascript" src="https://www.google.com/jsapi"></script> 
-<!--<script type="text/javascript"
-	src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart']},{'name':'feeds','version':'1.0','language':'en','nocss'='true','callback':'load'}]}">
+<script type="text/javascript"
+	src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart']}]}">
 	
 </script>
-<script src="//www.google.com/jsapi?autoload=%7B%22modules%22%3A%5B%7B%22name%22%3A%22feeds%22%2C%22version%22%3A%221.0%22%2C%22nocss%22%3Atrue%7D%5D%7D"></script>-->
-<script type="text/javascript">
-	//google.load('visualization', '0');
-google.load('feeds', '1');
-</script>
-<!-- <script type="text/javascript" src="https://www.google.com/jsapi"></script>  -->
-  <script type="text/javascript">
-
- <!-- Dynamic Feed Control and Stylesheet -->
-   <script src="http://www.google.com/uds/solutions/dynamicfeed/
-gfdynamicfeedcontrol.js"
-   type="text/javascript"></script>
-
-
 <style type="text/css">
-@import url("https://www.google.com/uds/solutions/dynamicfeed/gfdynamicfeedcontrol.css");
+@import url("http://www.google.com/uds/solutions/dynamicfeed/gfdynamicfeedcontrol.css");
 
 #feedControl {
-margin-top : 75px;
+margin-top : 55px;
 margin-left: auto;
 margin-right: auto;
 width : 500px;
@@ -40,21 +49,16 @@ color: #9CADD0;
 }
 </style>
 <script type="text/javascript">
-google.load("feeds", "1");
 function load() {
-google.load('feeds', '1');
-var	y = document.getElementById("searchKeyword");
-var feed ="https://news.google.com/news/feeds?q="+y.value+"&amp;hl=en&amp;output=rss";
+	var	y = document.getElementById("searchKeyword");
+var feed ="http://news.google.com/news/feeds?q="+y.value+"&amp;hl=en&amp;output=rss";
 
-//var feed ="https://news.google.com/news/feeds?hl=en&output=rss";
 new GFdynamicFeedControl(feed, "feedControl", {numResults:8});
 
+
 }
-function searchKeyword4()
-{
-//google.load("feeds", "1");
-load();
-}
+google.load("feeds", "1");
+google.setOnLoadCallback(load);
 
 function setDimentions2() {
 	var browser_dims = getBrowserDimensions();
@@ -66,6 +70,7 @@ function setDimentions2() {
 	document.getElementById("feedControl").style.minHeight = '200px';
 		document.getElementById("feedControl").style.minWidth = '250px';
 }
+
 </script>
 <script type="text/javascript">
 
@@ -225,7 +230,7 @@ setDimentions2();
 		query.send(handleQueryResponse);
 
 		function handleQueryResponse(response) {
-			
+		
 			var data = response.getDataTable();
 			if (null != data) {
 
@@ -641,7 +646,7 @@ setDimentions2();
 
 
 	<div id="main">
-<div id="feedControl">Loading...</div>
+<div id="feedControl"></div>
 		<!-- <div id="body">
 <div id="feedControl">Loading...</div>
 </div> -->
